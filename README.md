@@ -16,3 +16,4 @@ Game Ideas:
 9. Prevent cheating by introducing bounds in player stats that are regularly monitored (stopping players from manually editing their health bar)
 10. Can try mouse movement too
 11. Multiple classes ?
+12. Maybe keep the games to a certain time limit e.g. 10 minutes per game
