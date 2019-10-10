@@ -14,3 +14,4 @@ Game Ideas:
 7. Text chat ?
 8. User-inputted name tag above character
 9. Prevent cheating by introducing bounds in player stats that are regularly monitored (stopping players from manually editing their health bar)
+10. Can try mouse movement too
