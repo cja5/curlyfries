@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html> 
+	<head>
+		<title> healthbar</title> 
+		<link href="style.css" type="text/css" rel = "stylesheet">
+		<style>
+			.healthbar {
+				position: relative ;
+				width: 300px;
+				height: 40px;
+				border: 3px solid #000
+				
+				
+				}
+				
+			.health_percent_fill {
+				height: 100%;
+				background-color: #00cc00 ;
+				transition: width 0.5s;
+				
+				}
+			.health_percent{
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				
+		</style>
+
+	</head>
+	<body>
+		<div class = "healthbar">
+			<div class ="health_percent"> 100%</div>
+			<div class ="health_percent_fill" style= 
+				width:100%; 
+			</div>
+			
+			
+		</div>
+		<script>src ="healthbar.js" type ="text/javascript" language = "javascript" </script> 
+	</body>
+</html>
