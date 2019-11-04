@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>2D MMOG</title>
+  </head>
+<body>
+    <style>
+      canvas {
+        border: 5px solid black;
+      }
+      img {
+        display: none;
+      }
+      </style>
+
+<img id="blue_idle_left" src="assets/images/idle/blue_left_idle.png">
+<img id="blue_idle_right" src="assets/images/idle/blue_right_idle.png">
+<img id="blue_left" src="assets/images/moving/blue_left_moving.png">
+<img id="blue_right" src="assets/images/moving/blue_right_moving.png">
+<img id="blue_strike_left" src="assets/images/strike/blue_left_strike.png">
+<img id="blue_strike_right" src="assets/images/strike/blue_right_strike.png">
+
+<canvas id = "canvas" width="1000" height="800"></canvas>
+<script src = "src/attack.js"></script>
+<script src = "src/unit.js"></script>
+<script src = "src/input.js"></script>
+<script src = "src/game.js"></script>
+<script src = "src/index.js"></script>
+
+</body>
+</html>
