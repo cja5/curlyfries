@@ -1,19 +1,26 @@
 let canvas = document.getElementById("canvas");
 let ctx = canvas.getContext("2d");
 
-let CANVAS_HEIGHT = 800;
-let CANVAS_LENGTH = 1000;
 
+let game = new Game();
 
-let game = new Game(CANVAS_LENGTH, CANVAS_HEIGHT);
-game.start();
+//Gets current height and width of a client
+let height = document.documentElement.clientHeight;
+let width = document.documentElement.clientWidth;
 
  function loop() {
+    //Updates it in case any changes occur
+    let height = document.documentElement.clientHeight;
+    let width = document.documentElement.clientWidth;
 
-    ctx.clearRect(0, 0, CANVAS_LENGTH, CANVAS_HEIGHT);
+    ctx.canvas.height = height;
+    ctx.canvas.width = width;
+    //Clears the canvas and updates everything on it
+    ctx.clearRect(0, 0, width, height);
     game.changePos();
     game.update(ctx);
-    requestAnimationFrame(loop);
+    
+    requestAnimationFrame(loop);  //Basically a redraw function
   }
 
   loop();

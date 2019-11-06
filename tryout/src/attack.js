@@ -1,4 +1,5 @@
 class Attack {
+    //Creates a dot presumably at the tip of the blade
     constructor(game) {
         this.side = game.unit.side;
         this.y = game.unit.position.y+50;
@@ -8,7 +9,7 @@ class Attack {
             this.x = game.unit.position.x-5;
         }
     }
-
+    //Checks if this dot collides with another unit
     hit () {
         if (this.x >= game.un.position.x 
             && this.x <= game.un.position.x + game.un.width
