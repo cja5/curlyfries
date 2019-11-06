@@ -17,3 +17,6 @@ Game Ideas:
 10. Can try mouse movement too
 11. Multiple classes ?
 12. Maybe keep the games to a certain time limit e.g. 10 minutes per game
+
+
+Also please could everyone uploading/committing code use comments, it really helps everyone understand what you're doing so they can use that properly. It saves a lot of time in the long run. 
