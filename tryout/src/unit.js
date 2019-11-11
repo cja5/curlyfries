@@ -1,19 +1,24 @@
+//Main unit class
 class Unit {
 
     constructor(game, x, y) {
         this.game = game;
+        this.name = "Player Name";
         this.image = document.getElementById("blue_idle_right");
-        this.width = 75;
+        this.width = 80;
         this.height = 100;
         this.speed = 5;
         this.side = true;  //True = right, False = left
         this.moving = false;
+        this.alive = true;
         this.count = 0;     //Used for running animation
         this.count2 = 0;    //Used for power up animation
         this.idleRight = document.getElementById("blue_idle_right");
         this.idleLeft = document.getElementById("blue_idle_left");
         this.goRight = document.getElementById("blue_right");
         this.goLeft = document.getElementById("blue_left");
+        this.strikeLeft = document.getElementById("blue_strike_left");
+        this.strikeRight = document.getElementById("blue_strike_right");
         //Speed of a unit
         this.movement = {
             x: 0,
@@ -70,33 +75,41 @@ class Unit {
     }
     //Update function, draws a unit
     update(ctx) {
+        if (this.alive) {
         this.count++;  //Counts are used for animations
         this.count2++;
         if (this.count2 > 30) this.count2 = 0;
         if (this.moving) {  //If true, animates the unit and checks for collisions
             this.animate();
-            if (collisionDetector(this, this.game.powerUp)) {
-                this.game.powerUp.fillStyle = "#FF0000"; //Changes powerUp's colour upon collision
-                this.poweredUp = true;  //Makes the unit go super saiyan
-            } else {
-                this.game.powerUp.fillStyle = "#00FF00";
-            }
-        }
-        //Just a bunch of stuff for powered up animation, mostly for testing
-        if (this.poweredUp) {
-            ctx.fillStyle = "#00FF00";
-            ctx.textAlign = "center";
-            ctx.font = "30px Comic Sans MS";
-            ctx.fillText("POWERED UP!", this.actual.x + 40, this.actual.y -45);
-            if (this.count2 <= 15) {
-            ctx.lineWidth = "6";
-            ctx.strokeStyle = "#00FF00";
-            ctx.rect(this.actual.x - 30, this.actual.y - 30, this.width + 60, this.height +60);
-            ctx.stroke();
-            }
+            this.game.gameObjects.forEach((gameObject) => this.detectCollisions(gameObject));
         }
         //draw command, uses actual x and y
         ctx.drawImage(this.image, this.actual.x, this.actual.y, this.width, this.height);
+        }
+    }
+
+    detectCollisions(gameObject) {
+        if (collisionDetector(this, gameObject)) {
+        if (gameObject instanceof Wall) {
+            alert("Collision hard, sleep time");
+            // if (this.position.y > gameObject.position.y-this.height) {
+            //     this.position.y = gameObject.position.y-this.height;
+            // }
+            // if (this.position.y < gameObject.position.y+gameObject.height) {
+            //     this.position.y = gameObject.position.y+gameObject.height;
+            // } 
+            // if (this.position.x > gameObject.position.x-this.width) {
+            //     this.position.x = gameObject.position.x-this.width;
+            // }
+            // if (this.position.x < gameObject.position.x+gameObject.width) {
+            //     this.position.x = gameObject.position.x+gameObject.width;
+            // }
+           }
+           if (gameObject instanceof PowerUp) {
+                gameObject.fillStyle = "#FF0000"; //Changes powerUp's colour upon collision
+                this.poweredUp = true;  //Makes the unit go super saiyan
+           }
+        }
     }
 
     moveUp() {
@@ -149,9 +162,9 @@ class Unit {
         if (this.movement.x !== 0 || this.movement.y !== 0) return;
 
         if (this.side) {
-        this.image = document.getElementById("blue_strike_right");
+        this.image = this.strikeRight;
         } else {
-            this.image = document.getElementById("blue_strike_left");
+            this.image = this.strikeLeft;
         }
         let attack = new Attack(game); //Creates a new attack object
         attack.hit();                 //And checks if it hit
@@ -160,20 +173,24 @@ class Unit {
     changePos() {
         this.position.y += this.movement.y;
         this.position.x += this.movement.x;
-        //Restricts walkable zone, commented out for later use
+        //Restricts walkable zone
 
-        // if (this.position.y < 0) {
-        //     this.position.y = 0;
-        // }
-        // if (this.position.y > this.canvasHeight-this.height) {
-        //     this.position.y = this.canvasHeight-this.height;
-        // }
-        // if (this.position.x < 0) {
-        //     this.position.x = 0;
-        // }
-        // if (this.position.x > this.canvasLength-this.width) {
-        //     this.position.x = this.canvasLength-this.width;
-        // }
+        if (this.position.y < this.game.border.position.y) {
+            this.position.y = this.game.border.position.y;
+        }
+        if (this.position.y > this.game.border.height-this.height) {
+            this.position.y = this.game.border.height-this.height;
+        }
+        if (this.position.x < this.game.border.position.x) {
+            this.position.x = this.game.border.position.x;
+        }
+        if (this.position.x > this.game.border.width-this.width) {
+            this.position.x = this.game.border.width-this.width;
+        }
+
+        if(!this.alive) {
+            this.position.y = -100;
+        }
     }
     //Updates unit position on the screen
     updateCamera() {

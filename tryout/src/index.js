@@ -2,11 +2,11 @@ let canvas = document.getElementById("canvas");
 let ctx = canvas.getContext("2d");
 
 
-let game = new Game();
+let game = new Game(canvas);
 
 //Gets current height and width of a client
 let height = document.documentElement.clientHeight;
-let width = document.documentElement.clientWidth;
+let width = document.documentElement.clientHeight;
 
  function loop() {
     //Updates it in case any changes occur
