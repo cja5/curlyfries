@@ -17,9 +17,9 @@ class Game {
         this.enemies.push(this.un);
         this.powerUp = new PowerUp(this, 800, 150);
         this.gameObjects.push(this.powerUp);
-        this.gameObjects.push(new Wall(this, 750, 0))
-        this.gameObjects.push(new Wall(this, 1250, 0))
-        this.gameObjects.push(new Wall(this, 750, 1500))
+        this.gameObjects.push(new Wall(this, 750, 0, 50, 500))
+        this.gameObjects.push(new Wall(this, 1250, 0, 50, 500))
+        this.gameObjects.push(new Wall(this, 750, 1500, 50, 500))
         this.camera = new Camera(this.player);
         this.interface = new Interface(this);
         this.border = new Border(this);

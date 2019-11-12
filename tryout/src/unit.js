@@ -90,20 +90,32 @@ class Unit {
 
     detectCollisions(gameObject) {
         if (collisionDetector(this, gameObject)) {
+        //complicated check which side of wall was touched
         if (gameObject instanceof Wall) {
-            alert("Collision hard, sleep time");
-            // if (this.position.y > gameObject.position.y-this.height) {
-            //     this.position.y = gameObject.position.y-this.height;
-            // }
-            // if (this.position.y < gameObject.position.y+gameObject.height) {
-            //     this.position.y = gameObject.position.y+gameObject.height;
-            // } 
-            // if (this.position.x > gameObject.position.x-this.width) {
-            //     this.position.x = gameObject.position.x-this.width;
-            // }
-            // if (this.position.x < gameObject.position.x+gameObject.width) {
-            //     this.position.x = gameObject.position.x+gameObject.width;
-            // }
+            //top
+            if (this.position.y > gameObject.position.y-this.height
+                && this.position.y+this.height < gameObject.position.y+this.speed+1) {
+                this.position.y = gameObject.position.y-this.height;
+            }
+            //bottom
+            if (this.position.y < gameObject.position.y+gameObject.height
+                && this.position.y > gameObject.position.y+gameObject.height-(this.speed+1)) {
+                this.position.y = gameObject.position.y+gameObject.height;
+            } 
+            //right side
+            if (this.position.x > gameObject.position.x-this.width
+                && this.position.x < gameObject.position.x+this.speed+1
+                && this.position.y + this.height > gameObject.position.y+this.speed+1
+                && this.position.y < gameObject.position.y+gameObject.height-(this.speed+1) ) {
+                this.position.x = gameObject.position.x-this.width;
+            }
+            //left side
+            if (this.position.x < gameObject.position.x+gameObject.width
+                && this.position.x > gameObject.position.x-this.speed+1
+                && this.position.y + this.height > gameObject.position.y+this.speed+1
+                && this.position.y < gameObject.position.y+gameObject.height-(this.speed+1)) {
+                this.position.x = gameObject.position.x+gameObject.width;
+            }
            }
            if (gameObject instanceof PowerUp) {
                 gameObject.fillStyle = "#FF0000"; //Changes powerUp's colour upon collision

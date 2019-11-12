@@ -1,8 +1,8 @@
 class Wall extends GameObject {
-    constructor(game, x, y) {
+    constructor(game, x, y, width, height) {
         super(game, x, y);
-        this.width = 50;
-        this.height = 500;
+        this.width = width;
+        this.height = height;
     }
 
     update(ctx) {
