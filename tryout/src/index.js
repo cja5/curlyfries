@@ -2,7 +2,7 @@ let canvas = document.getElementById("canvas");
 let ctx = canvas.getContext("2d");
 
 
-let game = new Game(canvas);
+let game = new Game();
 
 //Gets current height and width of a client
 let height = document.documentElement.clientHeight;
@@ -19,7 +19,7 @@ let width = document.documentElement.clientHeight;
     ctx.clearRect(0, 0, width, height);
     game.changePos();
     game.update(ctx);
-    
+
     requestAnimationFrame(loop);  //Basically a redraw function
   }
 

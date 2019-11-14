@@ -4,7 +4,7 @@ class Border {
         this.game = game;
         this.width = 4000;
         this.height = 2000;
-        
+
         this.position = {
             x:0,
             y:100

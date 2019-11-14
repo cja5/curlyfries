@@ -1,5 +1,5 @@
 //Same as blue unit, yet red
-class RedUnit extends BlueUnit {
+class RedUnit extends Unit {
     constructor(game, x, y) {
         super(game, x, y);
         this.image = document.getElementById("red_idle_right");

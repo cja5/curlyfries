@@ -1,10 +1,9 @@
 class Game {
-    constructor(canvas) {
+    constructor() {
         //This object is passed to every other so they can freely access game data
         this.gameObjects = [];    //Array for game objects e.g. walls and power ups
         this.otherPlayers = [];  //Array for all other players
         this.enemies = [];      //Array solely for player enemies
-        this.canvas = canvas;
         this.unit = new RedUnit(this, 550, 550);
         this.player = new ActivePlayer(this.unit, this);
         this.un = new BlueUnit(this, 200, 500);

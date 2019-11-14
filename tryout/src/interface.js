@@ -13,9 +13,11 @@ class Interface {
             ctx.fillText("previous player", 50, 50);
             ctx.fillText("next player", document.documentElement.clientWidth-150, 50);
             ctx.font = "35px Arial";
-            ctx.fillText(this.game.otherPlayers[this.game.player.playerNum].name, document.documentElement.clientWidth/2-75, 30);
+            var name = this.game.otherPlayers[this.game.player.playerNum].name;
+            ctx.fillText(name, document.documentElement.clientWidth/2-ctx.measureText(name).width/2, 30);
         }
         ctx.font = "30px Arial";
-        ctx.fillText(this.game.score+" :: "+0, document.documentElement.clientWidth/2-30, 70);
+        var score = this.game.score+" :: "+0;
+        ctx.fillText(score, document.documentElement.clientWidth/2-ctx.measureText(score).width/2, 70);
     }
 }
