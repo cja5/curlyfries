@@ -11,3 +11,17 @@ class PowerUp extends GameObject{
         ctx.fillRect(this.actual.x, this.actual.y, this.width, this.height);
     }
 }
+//Gives temporary invulnerability
+class Shield extends PowerUp {
+    constructor(game, x, y) {
+        super(game, x, y);
+        this.fillStyle = "Blue";
+    }
+}
+//Restores hp
+class HealthPot extends PowerUp {
+    constructor(game, x, y) {
+        super(game, x, y);
+        this.fillStyle = "Green";
+    }
+}

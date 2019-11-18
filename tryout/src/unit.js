@@ -12,14 +12,24 @@ class Unit {
         this.moving = false;
         this.alive = true;
         this.count = 0;     //Used for running animation
-        this.count2 = 0;    //Used for power up animation
-        this.count3 = 0;    //Used for respawn time
+        this.count2 = 0;   //Used for power up timer
+        this.count3 = 0;  //Used for respawn time
         this.idleRight = document.getElementById("blue_idle_right");
         this.idleLeft = document.getElementById("blue_idle_left");
         this.goRight = document.getElementById("blue_right");
         this.goLeft = document.getElementById("blue_left");
         this.strikeLeft = document.getElementById("blue_strike_left");
         this.strikeRight = document.getElementById("blue_strike_right");
+        this.maxHealth = 5;
+        this.health = 1;
+        this.nameTag = new NameTag(this);
+        this.healthBar = new HealthBar(this);
+        this.shield = new Power(this);
+        //respawn coordinates
+        this.respawn = {
+            x: x,
+            y: y
+        }
         //Speed of a unit
         this.movement = {
             x: 0,
@@ -40,7 +50,7 @@ class Unit {
 
     }
     //Check for standing still, changes running animation back to being idle
-    check() {
+    check() {  
         if (this.movement.x === 0 && this.movement.y === 0) {
             this.moving = false;
             if(this.side) {
@@ -78,21 +88,33 @@ class Unit {
     update(ctx) {
         if (this.alive) {
         this.count++;  //Counts are used for animations
-        this.count2++;
-        if (this.count2 > 30) this.count2 = 0;
         if (this.moving) {  //If true, animates the unit and checks for collisions
             this.animate();
             this.game.gameObjects.forEach((gameObject) => this.detectCollisions(gameObject));
         }
         //draw command, uses actual x and y
         ctx.drawImage(this.image, this.actual.x, this.actual.y, this.width, this.height);
-      } else {
-        if(this.count3>100) {
-          this.alive = true;
-          this.count3 = -1;
+        this.nameTag.update(ctx);
+        this.healthBar.update(ctx);
+        if(this.poweredUp) { //Shield power up timer
+            this.shield.update(ctx);
+            this.count2++;
+            if (this.count2 > 300) {
+                this.poweredUp = false;
+            }
         }
-        this.count3++
-      }
+        } else { //Respawn timer basically
+            if(this.count3>100) {
+                this.health = this.maxHealth;
+                this.alive = true;
+                this.count3 = -1;
+                this.position = {
+                    x: this.respawn.x,
+                    y: this.respawn.y
+                }
+            }
+            this.count3++
+          }
     }
 
     detectCollisions(gameObject) {
@@ -108,7 +130,7 @@ class Unit {
             if (this.position.y < gameObject.position.y+gameObject.height
                 && this.position.y > gameObject.position.y+gameObject.height-(this.speed+1)) {
                 this.position.y = gameObject.position.y+gameObject.height;
-            }
+            } 
             //right side
             if (this.position.x > gameObject.position.x-this.width
                 && this.position.x < gameObject.position.x+this.speed+1
@@ -124,9 +146,12 @@ class Unit {
                 this.position.x = gameObject.position.x+gameObject.width;
             }
            }
-           if (gameObject instanceof PowerUp) {
-                gameObject.fillStyle = "#FF0000"; //Changes powerUp's colour upon collision
+           if (gameObject instanceof Shield) {
                 this.poweredUp = true;  //Makes the unit go super saiyan
+                this.count2 = 0;
+           }
+           if (gameObject instanceof HealthPot) {
+                this.health = this.maxHealth;
            }
         }
     }
@@ -148,11 +173,11 @@ class Unit {
     }
 
     stopDown() {
-        if(this.movement.y > 0)
+        if(this.movement.y > 0) 
         this.movement.y = 0;
         this.check();
     }
-
+    
     moveLeft() {
         this.movement.x = -this.speed;
         this.side = false;
@@ -160,11 +185,11 @@ class Unit {
     }
 
     stopLeft() {
-        if(this.movement.x < 0)
+        if(this.movement.x < 0) 
         this.movement.x = 0;
         this.check();
     }
-
+    
     moveRight() {
         this.movement.x = this.speed;
         this.side = true;
@@ -172,7 +197,7 @@ class Unit {
     }
 
     stopRight() {
-        if(this.movement.x > 0)
+        if(this.movement.x > 0) 
         this.movement.x = 0;
         this.check();
     }
@@ -188,27 +213,24 @@ class Unit {
         let attack = new Attack(game); //Creates a new attack object
         attack.hit();                 //And checks if it hit
     }
-    //Restricts walkable zone
-    checkBorder() {
-      if (this.position.y < this.game.border.position.y) {
-          this.position.y = this.game.border.position.y;
-      }
-      if (this.position.y > this.game.border.height-this.height) {
-          this.position.y = this.game.border.height-this.height;
-      }
-      if (this.position.x < this.game.border.position.x) {
-          this.position.x = this.game.border.position.x;
-      }
-      if (this.position.x > this.game.border.width-this.width) {
-          this.position.x = this.game.border.width-this.width;
-      }
-    }
     //Changes unit position in the game
     changePos() {
         this.position.y += this.movement.y;
         this.position.x += this.movement.x;
+        //Restricts walkable zone
 
-        this.checkBorder();
+        if (this.position.y < this.game.border.position.y) {
+            this.position.y = this.game.border.position.y;
+        }
+        if (this.position.y > this.game.border.height-this.height) {
+            this.position.y = this.game.border.height-this.height;
+        }
+        if (this.position.x < this.game.border.position.x) {
+            this.position.x = this.game.border.position.x;
+        }
+        if (this.position.x > this.game.border.width-this.width) {
+            this.position.x = this.game.border.width-this.width;
+        }
 
         if(!this.alive) {
             this.position.y = -100;

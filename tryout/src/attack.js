@@ -9,9 +9,12 @@ class Attack {
         } else {
             this.x = game.unit.position.x-5;
         }
+        this.swing = document.getElementById("swing");
+        this.swing.volume = 0.1;
     }
     //Checks if this dot collides with another unit
     hit () {
+        this.swing.play();
         game.enemies.forEach((enemy) => this.checkHit(enemy));
         }
 
@@ -20,8 +23,13 @@ class Attack {
             && this.x <= enemy.position.x + enemy.width
             && this.y >= enemy.position.y 
             && this.y <= enemy.position.y + enemy.height) {
-                enemy.alive = false;
-                this.game.score+=1;
+                if(enemy.poweredUp === false) { //If enemy is powered up, negate all damage
+                    enemy.health--;
+                }
+                if(enemy.health === 0) { //If enemy has 0 health, they die
+                    enemy.alive = false;
+                    this.game.score+=1;
+                }
             }
         }
     }

@@ -2,26 +2,26 @@
 class Border {
     constructor(game) {
         this.game = game;
-        this.width = 4000;
-        this.height = 2000;
-
+        this.width = 4000;   //Game width
+        this.height = 2000;  //Game heigth
+        //position on the map
         this.position = {
             x:0,
             y:100
         }
-
+        //position on the screen
         this.actual = {
             x:0,
             x:0
         }
     }
-
+    //draw method
     update(ctx) {
         ctx.beginPath();
         ctx.rect(this.actual.x, this.actual.y, this.width, this.height);
         ctx.stroke();
     }
-
+    //updates it's position on screen
     updateCamera() {
         this.actual = {
             x: this.position.x - this.game.camera.position.x,

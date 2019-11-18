@@ -1,3 +1,4 @@
+//Wall class, draws an interactive wall
 class Wall extends GameObject {
     constructor(game, x, y, width, height) {
         super(game, x, y);

@@ -19,7 +19,7 @@ let width = document.documentElement.clientHeight;
     ctx.clearRect(0, 0, width, height);
     game.changePos();
     game.update(ctx);
-
+    
     requestAnimationFrame(loop);  //Basically a redraw function
   }
 
