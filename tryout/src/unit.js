@@ -1,9 +1,9 @@
 //Main unit class
 class Unit {
 
-    constructor(game, x, y) {
+    constructor(game, x, y, name) {
         this.game = game;
-        this.name = "Player Name";
+        this.name = name;
         this.image = document.getElementById("blue_idle_right");
         this.width = 80;
         this.height = 100;
@@ -210,15 +210,22 @@ class Unit {
         } else {
             this.image = this.strikeLeft;
         }
-        let attack = new Attack(game); //Creates a new attack object
-        attack.hit();                 //And checks if it hit
+        let attack = new Attack(this.game, this); //Creates a new attack object
+        attack.hit();                            //And checks if it hit
     }
     //Changes unit position in the game
     changePos() {
         this.position.y += this.movement.y;
         this.position.x += this.movement.x;
         //Restricts walkable zone
+        this.checkBorder();
 
+        if(!this.alive) {
+            this.position.y = -100;
+        }
+    }
+
+    checkBorder() {
         if (this.position.y < this.game.border.position.y) {
             this.position.y = this.game.border.position.y;
         }
@@ -230,10 +237,6 @@ class Unit {
         }
         if (this.position.x > this.game.border.width-this.width) {
             this.position.x = this.game.border.width-this.width;
-        }
-
-        if(!this.alive) {
-            this.position.y = -100;
         }
     }
     //Updates unit position on the screen

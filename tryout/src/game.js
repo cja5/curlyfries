@@ -1,25 +1,41 @@
 class Game {
-    constructor() {
+    constructor(num) {
         //This object is passed to every other so they can freely access game data
-        this.gameObjects = [];    //Array for game objects e.g. walls and power ups
-        this.otherPlayers = [];  //Array for all other players
-        this.enemies = [];      //Array solely for player enemies
-        this.unit = new RedUnit(this);
-        this.player = new ActivePlayer(this.unit, this);
-        this.un = new BlueUnit(this);
-        this.otherPlayers.push(this.un);
-        for(var i = 0; i < 10 ; i++) {
-            var uno = new BlueUnit(this);
-            this.otherPlayers.push(uno);
-            this.enemies.push(uno);
+        this.gameObjects = [];     //Array for game objects e.g. walls and power ups
+        this.otherPlayers = [];   //Array for all other players
+        this.blueTeam = [];      //Array for blue team
+        this.redTeam = [];      //Array for red team
+        this.spectate = false; //Passed to interface
+        this.dummy = new RedUnit(this, "Dummy");
+        this.otherPlayers.push(this.dummy);
+        this.redTeam.push(this.dummy);
+        if(num===1) { //1 - red team
+            this.unit = new RedUnit(this, "Player");
+            this.redTeam.push(this.unit);  
+            this.player = new ActivePlayer(this.unit, this);
+        } else if(num===2) { //2 - blue team
+            this.unit = new BlueUnit(this, "Player");
+            this.blueTeam.push(this.unit); 
+            this.player = new ActivePlayer(this.unit, this);
+        } else if(num===3) { //3 - spectator
+            this.player = new Spectator(this.dummy, this);
+            this.spectate = true; //enables spectator interface
         }
-        this.enemies.push(this.un);
+        this.un = new BlueUnit(this, "Uno");
+        this.otherPlayers.push(this.un);
+        this.blueTeam.push(this.un); 
+        for(var i = 0; i < 10 ; i++) {
+            var uno = new BlueUnit(this, "Default");
+            this.otherPlayers.push(uno);
+            this.blueTeam.push(uno); 
+        }
         this.addObjects();
         this.camera = new Camera(this.player);
-        this.interface = new Interface(this);
+        this.interface = new Interface(this, this.spectate);
         this.border = new Border(this);
 
-        this.score = 0;
+        this.redScore = 0;
+        this.blueScore = 0;
     }
     //Changes position of every object, updates the camera
     changePos() {
