@@ -18,6 +18,7 @@ class Border {
     //draw method
     update(ctx) {
         ctx.beginPath();
+        ctx.strokeStyle = "black";
         ctx.rect(this.actual.x, this.actual.y, this.width, this.height);
         ctx.stroke();
     }

@@ -13,9 +13,9 @@ class Menu {
     }
 
     update(ctx, x, y) {
-        if(!this.gameStarted) { //If game has started, update game only instead
         this.x = x; //update mouse x
         this.y = y; //update mouse y
+        if(!this.gameStarted) { //If game has started, update game only instead
         //A bunch of stuff to draw
         ctx.fillStyle = "black";
         ctx.font = "30px Arial";
@@ -46,7 +46,10 @@ class Menu {
     }
     //Mouse click function
     click() {
-        if(!this.gameStarted) { //If game has started, this is not required
+        if(this.gameStarted) {
+            this.game.click(this.x, this.y);
+        }
+        else { //If game has started, this is not required
             if(this.checkMouse(this.x, this.y, 100)) {
                 this.red();
             } else if(this.checkMouse(this.x, this.y, 200)) {

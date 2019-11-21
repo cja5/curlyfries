@@ -23,4 +23,8 @@ class Spectator extends Player {
         }
         this.unit = this.game.otherPlayers[this.playerNum];
     }
+
+    click(x, y) {
+        this.moveRight();
+    }
 }

@@ -11,6 +11,7 @@ class Unit {
         this.side = true;  //True = right, False = left
         this.moving = false;
         this.alive = true;
+        this.mouseMovement = false;
         this.count = 0;     //Used for running animation
         this.count2 = 0;   //Used for power up timer
         this.count3 = 0;  //Used for respawn time
@@ -45,6 +46,11 @@ class Unit {
             x:0,
             y:0
         };
+        //required for mouse movement
+        this.movingTo = {
+            x:0,
+            y:0
+        };
 
         this.poweredUp = false;
 
@@ -53,6 +59,7 @@ class Unit {
     check() {  
         if (this.movement.x === 0 && this.movement.y === 0) {
             this.moving = false;
+            this.mouseMovement = false;
             if(this.side) {
                 this.image = this.idleRight;
             } else {
@@ -115,6 +122,9 @@ class Unit {
             }
             this.count3++
           }
+          if(this.mouseMovement) {
+              this.mouseCheck();
+          }
     }
 
     detectCollisions(gameObject) {
@@ -153,6 +163,41 @@ class Unit {
            if (gameObject instanceof HealthPot) {
                 this.health = this.maxHealth;
            }
+        }
+    }
+    //After mouse click
+    moveToClicked(x, y) {
+        this.movingTo.x = this.position.x+(x-this.actual.x);
+        this.movingTo.y = this.position.y+(y-this.actual.y);
+        this.mouseMovement = true;
+        this.moveTo();
+    }
+    //Method for mouse movement
+    moveTo() {
+        this.move();
+        if(this.position.x+this.width/2 > this.movingTo.x) {
+            this.movement.x = -this.speed;
+            this.side = false;
+        } if(this.position.x+this.width/2 < this.movingTo.x) {
+            this.movement.x = this.speed;
+            this.side = true;
+        }
+        if(this.position.y+this.height/2 > this.movingTo.y) {
+            this.movement.y = -this.speed;
+        } if(this.position.y+this.height/2 < this.movingTo.y) {
+            this.movement.y = this.speed;
+        }
+    }
+    //Stops the unit when needed
+    mouseCheck() {
+        if(this.position.x+this.width/2 > this.movingTo.x-5
+            &&this.position.x+this.width/2 < this.movingTo.x+5) {
+                this.movement.x = 0;
+                this.check();
+        } if (this.position.y+this.height/2 > this.movingTo.y-5
+            &&this.position.y+this.height/2 < this.movingTo.y+5) {
+            this.movement.y = 0;
+            this.check();
         }
     }
 

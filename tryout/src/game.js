@@ -74,4 +74,8 @@ class Game {
         this.gameObjects.push(new Shield(this, 0, 775));
         this.gameObjects.push(new HealthPot(this, 0, 1200));
     }
+
+    click(x, y) {
+        this.player.click(x, y);
+    }
 }

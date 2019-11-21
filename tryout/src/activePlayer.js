@@ -6,4 +6,8 @@ class ActivePlayer extends Player{
         //Adds an input listener to a unit
         new InputListener(this.unit);
     }
+
+    click(x, y) {
+        this.unit.moveToClicked(x, y);
+    }
 }

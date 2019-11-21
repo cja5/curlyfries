@@ -3,6 +3,7 @@ class Player {
     constructor(unit, game) {
         this.game = game;
         this.unit = unit;
+        this.name = this.unit.name;
         this.position = {
             x: 0,
             y: 0

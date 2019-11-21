@@ -2,6 +2,7 @@ class Interface {
     constructor(game, mode)  {
         this.game = game;
         this.spectateMode = mode;  //enables spectator mode interface
+        this.chat = new Chat(this.game);
     }
     //draws a bunch of stuff on top of the screen
     update(ctx) {
@@ -19,5 +20,7 @@ class Interface {
         ctx.font = "30px Arial";
         var score = this.game.redScore+" :: "+this.game.blueScore;
         ctx.fillText(score, document.documentElement.clientWidth/2-ctx.measureText(score).width/2, 70);
+
+        this.chat.update(ctx);
     }
 }

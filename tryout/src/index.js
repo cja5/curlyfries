@@ -7,7 +7,9 @@ let mouse = {
   y:0
 }
 window.onmousemove = mouseMovement;
+window.ontouchmove = mouseMovement;
 window.onmousedown = mouseClick;
+window.ontouchstart = mouseClick;
 //Gets current height and width of a client
 let height = document.documentElement.clientHeight;
 let width = document.documentElement.clientHeight;
