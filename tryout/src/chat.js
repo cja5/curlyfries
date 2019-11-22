@@ -20,15 +20,16 @@ class Chat {
     enterPressed() {
         if (this.message != "") {
             for(var i = 0; i < this.messages.length; i++) {
-                if (i = this.messages.length-1) {
+                if (i === this.messages.length-1) {
                     this.messages[i] = this.game.player.name+": "+ this.message;
                     this.message = "";
                 } else {
                     this.messages[i] = this.messages[i+1];
                 }
             }
-        }   
-        this.typing = !this.typing;
+        }   else {
+            this.typing = !this.typing;
+        }
     }
 
     update(ctx) {
