@@ -1,0 +1,117 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  height: 100vh;
+}
+
+.screen{
+  width: auto;
+  height: auto;
+  padding: 15%;
+  margin: auto;
+  overflow: auto; /* Enable scroll if needed */
+  background-image: url("background.png");
+  background-size: cover;
+  background-position: center;
+  text-align: center;
+  font-size: 30;
+  font-style: normal;
+  font-family: cursive;
+}
+
+
+
+.form{
+  background-image: url("scroll2.png");
+  background-size: 500px;
+  background-position: center;
+
+  width: 500px;
+  height: 600px;
+
+  margin: 10px auto 100px;
+  padding: 90px, 0 , 0,0;
+  text-align: center;
+
+
+}
+
+.label{
+  display: inline-block;
+}
+.block{
+  color: black;
+  font-weight: bold;
+  padding: 4px;
+}
+
+.form input{
+  font-family:  "Roboto", sans-serif;
+  background: #f2f2f2;
+  width: 35%;
+  border: 3px solid #888;
+  margin: 0 0 15px;
+  padding: 15px;
+  box-sizing: content-box;
+  font-size: 14px;
+}
+
+
+/* Set a style for all buttons */
+.form button {
+  background-color: #000000;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 50%;
+}
+
+
+button:hover {
+  opacity: 0.8;
+}
+
+/* Extra styles for the continue button */
+.continue {
+  width: auto;
+  padding: 10px 40px;
+  background-color: #0000FF;
+}
+
+/* Center the image and position the close button */
+.imgcontainer {
+  text-align: center;
+  margin: 15px 0 5px 0;
+  position:relative;
+  padding-top: 75px;
+}
+
+img.avatar {
+  width: 20%;
+  border-radius: 30%;
+}
+
+
+span.psw {
+  float: right;
+  padding-top: 16px;
+}
+
+
+
+/* Add Zoom Animation */
+.animate {
+  -webkit-animation: animatezoom 0.6s;
+  animation: animatezoom 0.6s
+}
+
+@-webkit-keyframes animatezoom {
+  from {-webkit-transform: scale(0)}
+  to {-webkit-transform: scale(1)}
+}
+
+@keyframes animatezoom {
+  from {transform: scale(0)}
+  to {transform: scale(1)}
+}
