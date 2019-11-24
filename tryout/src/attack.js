@@ -1,8 +1,9 @@
 class Attack {
     //Creates a dot presumably at the tip of the blade
-    constructor(game, unit) {
+    constructor(game, unit, socket) {
         this.unit = unit;
         this.game = game;
+        this.socket = socket;
         this.side = this.unit.side;
         this.y = this.unit.position.y+50;
         if (this.side) {
@@ -12,16 +13,18 @@ class Attack {
         }
         this.swing = document.getElementById("swing");
         this.swing.volume = 0.1;
+        this.score = 0;
     }
     //Checks if this dot collides with another unit
     hit () {
+        this.score = 0;
         if(this.unit instanceof RedUnit) { //Check the team
             this.swing.play();
             this.game.blueTeam.forEach((enemy) => this.checkHit(enemy));
         }else if(this.unit instanceof BlueUnit) { //Check the team
             this.swing.play();
             this.game.redTeam.forEach((enemy) => this.checkHit(enemy));
-        }
+        } return this.score;
     }
 
     checkHit(enemy) {
@@ -31,14 +34,12 @@ class Attack {
             && this.y <= enemy.position.y + enemy.height) {
                 if(enemy.poweredUp === false) { //If enemy is powered up, negate all damage
                     enemy.health--;
+                    this.socket.emit('Health', enemy.number, enemy.health);
                 }
-                if(enemy.health === 0) { //If enemy has 0 health, they die
+                if(enemy.health <= 0) { //If enemy has 0 health, they die
                     enemy.alive = false;
-                    if(enemy instanceof RedUnit) { //Check the team again
-                        this.game.blueScore+=1;
-                    } else if (enemy instanceof BlueUnit) {
-                        this.game.redScore+=1;
-                    }
+                    this.socket.emit('Death', enemy.number);
+                    this.score++;
                 }
             }
         }

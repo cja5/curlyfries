@@ -1,7 +1,9 @@
 //Main unit class
 class Unit {
 
-    constructor(game, x, y, name) {
+    constructor(game, x, y, name, socket) {
+        this.socket = socket;
+        this.number = 0;  //unit's own player number
         this.game = game;
         this.name = name;
         this.image = document.getElementById("blue_idle_right");
@@ -22,7 +24,7 @@ class Unit {
         this.strikeLeft = document.getElementById("blue_strike_left");
         this.strikeRight = document.getElementById("blue_strike_right");
         this.maxHealth = 5;
-        this.health = 1;
+        this.health = 5;
         this.nameTag = new NameTag(this);
         this.healthBar = new HealthBar(this);
         this.shield = new Power(this);
@@ -58,6 +60,9 @@ class Unit {
     //Check for standing still, changes running animation back to being idle
     check() {  
         if (this.movement.x === 0 && this.movement.y === 0) {
+            if(this.game.player.unit === this) {
+                this.socket.emit('Desync check', this.number, 0, 0, this.side);
+            }
             this.moving = false;
             this.mouseMovement = false;
             if(this.side) {
@@ -112,6 +117,7 @@ class Unit {
         }
         } else { //Respawn timer basically
             if(this.count3>100) {
+                this.socket.emit('Health', this.number, this.maxHealth);
                 this.health = this.maxHealth;
                 this.alive = true;
                 this.count3 = -1;
@@ -162,6 +168,9 @@ class Unit {
            }
            if (gameObject instanceof HealthPot) {
                 this.health = this.maxHealth;
+                if(this.game.player.unit === this) {
+                    this.socket.emit('Health', this.number, this.maxHealth);
+                }
            }
         }
     }
@@ -169,6 +178,12 @@ class Unit {
     moveToClicked(x, y) {
         this.movingTo.x = this.position.x+(x-this.actual.x);
         this.movingTo.y = this.position.y+(y-this.actual.y);
+        this.socket.emit('Click move', this.number, this.movingTo.x, this.movingTo.y);
+        this.moveToClick(this.movingTo.x, this.movingTo.y);
+    }
+    moveToClick(x, y) {
+        this.movingTo.x = x;
+        this.movingTo.y = y;
         this.mouseMovement = true;
         this.moveTo();
     }
@@ -194,74 +209,132 @@ class Unit {
             &&this.position.x+this.width/2 < this.movingTo.x+5) {
                 this.movement.x = 0;
                 this.check();
+                this.socket.emit('Desync check', this.number, this.movement.x, this.movement.y, this.side);
         } if (this.position.y+this.height/2 > this.movingTo.y-5
             &&this.position.y+this.height/2 < this.movingTo.y+5) {
             this.movement.y = 0;
             this.check();
+            this.socket.emit('Desync check', this.number, this.movement.x, this.movement.y, this.side);
         }
     }
 
-    moveUp() {
+    moveUpNext() {
         this.movement.y = -this.speed;
         this.move();
     }
 
-    stopUp() {
+    moveUp() {
+        this.socket.emit('Move up', this.number);
+        this.moveUpNext();
+    }
+
+    stopUpNext() {
         if(this.movement.y < 0) //Changes speed to 0 only when unit goes up
         this.movement.y = 0;
         this.check();
     }
 
-    moveDown() {
+    stopUp() {
+        this.socket.emit('Stop up', this.number);
+        this.stopUpNext();
+    }
+
+    moveDownNext() {
         this.movement.y = this.speed;
         this.move();
     }
 
-    stopDown() {
+    moveDown() {
+        this.socket.emit('Move down', this.number);
+        this.moveDownNext();
+    }
+
+    stopDownNext() {
         if(this.movement.y > 0) 
         this.movement.y = 0;
         this.check();
     }
+
+    stopDown() {
+        this.socket.emit('Stop down', this.number);
+        this.stopDownNext();
+    }
     
-    moveLeft() {
+    moveLeftNext() {
         this.movement.x = -this.speed;
         this.side = false;
         this.move();
     }
 
-    stopLeft() {
+    moveLeft() {
+        this.socket.emit('Move left', this.number);
+        this.moveLeftNext();
+    }
+
+    stopLeftNext() {
         if(this.movement.x < 0) 
         this.movement.x = 0;
         this.check();
     }
+
+    stopLeft() {
+        this.socket.emit('Stop left', this.number);
+        this.stopLeftNext();
+    }
     
-    moveRight() {
+    moveRightNext() {
         this.movement.x = this.speed;
         this.side = true;
         this.move();
     }
 
-    stopRight() {
+    moveRight() {
+        this.socket.emit('Move right', this.number);
+        this.moveRightNext();
+    }
+
+    stopRightNext() {
         if(this.movement.x > 0) 
         this.movement.x = 0;
         this.check();
     }
+
+    stopRight() {
+        this.socket.emit('Stop right', this.number);
+        this.stopRightNext();
+    }
     //Attack is only possible when unit is standing still
-    attack() {
-        if (this.movement.x !== 0 || this.movement.y !== 0) return;
+    attackNext() {
+        if (this.movement.x !== 0 || this.movement.y !== 0) return 0;
 
         if (this.side) {
         this.image = this.strikeRight;
         } else {
             this.image = this.strikeLeft;
         }
-        let attack = new Attack(this.game, this); //Creates a new attack object
-        attack.hit();                            //And checks if it hit
+        let attack = new Attack(this.game, this, this.socket); //Creates a new attack object
+        return attack.hit();                                  //And checks if it hit
+    }
+
+    attack() {
+        this.socket.emit('Attack', this.number);
+        var scoreChange = this.attackNext();
+        if(scoreChange !== 0) {
+            this.socket.emit('Score change', this.number, scoreChange);
+        }
+    }
+
+    checkAttack() {
+        this.socket.emit('Check attack', this.number);
+        this.check();
     }
     //Changes unit position in the game
     changePos() {
         this.position.y += this.movement.y;
         this.position.x += this.movement.x;
+        if(this.game.player.unit === this && this.moving) {
+            this.socket.emit('Change position', this.number, this.position.x, this.position.y);
+        }
         //Restricts walkable zone
         this.checkBorder();
 

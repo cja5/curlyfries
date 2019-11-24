@@ -10,4 +10,9 @@ class ActivePlayer extends Player{
     click(x, y) {
         this.unit.moveToClicked(x, y);
     }
+
+    updatePos() {
+        this.unit.changePos();
+        super.updatePos();
+    }
 }

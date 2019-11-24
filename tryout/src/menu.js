@@ -1,6 +1,7 @@
 //Starting menu
 class Menu {
-    constructor() {
+    constructor(socket) {
+        this.socket = socket;
         this.game = null; //Create future game variable
         this.gameStarted = false; //Game state
         this.text1 = "Join game as:"
@@ -68,17 +69,20 @@ class Menu {
     }
 
     red() { //Start as a red boi
-        this.game = new Game(1);
+        this.game = new Game(1, this.socket);
+        this.socket.emit('New player', 'Red boi', 1, 100, 950, 5);
         this.gameStarted = true;
     }
 
     blue() { //Start as a blue boi
-        this.game = new Game(2);
+        this.game = new Game(2, this.socket);
+        this.socket.emit('New player', 'Blue boi', 2, 3800, 950, 5);
         this.gameStarted = true;
     }
 
     spectator() { //Start as a spectator
-        this.game = new Game(3);
+        this.game = new Game(3, this.socket);
+        this.socket.emit('New player', 'Spectator', 3, -1, -1, 5);
         this.gameStarted = true;
     }
 }

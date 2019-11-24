@@ -54,7 +54,7 @@ class InputListener {
                     switch(event.keyCode) {
                         //Space
                         case 32: 
-                            unit.check();
+                            unit.checkAttack();
                             break;
                         //Up
                         case 38: 
@@ -92,5 +92,36 @@ class InputListener {
     
                 }
             })
+    }
+}
+
+class SpectatorListener {
+    constructor(player) {
+        this.player = player;
+        document.addEventListener("keydown", event => {
+            
+            if(this.player.game.interface.chat.typing === false) {
+
+                switch(event.keyCode) {
+                    //Left
+                    case 37: 
+                        this.player.moveLeft();
+                        break;
+                    //A
+                    case 65: 
+                        this.player.moveLeft();
+                        break;
+                    //Right
+                    case 39: 
+                        this.player.moveRight();
+                        break;
+                    //D
+                    case 68: 
+                        this.player.moveRight();
+                        break;
+
+                }
+            }
+        })
     }
 }

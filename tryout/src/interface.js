@@ -1,8 +1,8 @@
 class Interface {
-    constructor(game, mode)  {
+    constructor(game, mode, socket)  {
         this.game = game;
         this.spectateMode = mode;  //enables spectator mode interface
-        this.chat = new Chat(this.game);
+        this.chat = new Chat(this.game, socket);
     }
     //draws a bunch of stuff on top of the screen
     update(ctx) {
@@ -14,8 +14,10 @@ class Interface {
             ctx.fillText("previous player", 50, 50);
             ctx.fillText("next player", document.documentElement.clientWidth-150, 50);
             ctx.font = "35px Arial";
-            var name = this.game.otherPlayers[this.game.player.playerNum].name;
-            ctx.fillText(name, document.documentElement.clientWidth/2-ctx.measureText(name).width/2, 30);
+            if (this.game.otherPlayers.length !== 0) {
+                var name = this.game.otherPlayers[this.game.player.playerNum].name;
+                ctx.fillText(name, document.documentElement.clientWidth/2-ctx.measureText(name).width/2, 30);
+            }
         }
         ctx.font = "30px Arial";
         var score = this.game.redScore+" :: "+this.game.blueScore;

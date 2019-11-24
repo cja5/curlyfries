@@ -1,5 +1,6 @@
 class Chat {
-    constructor(game) {
+    constructor(game, socket) {
+        this.socket = socket;
         this.game = game;
         this.messages = ["", "", "", "", "","","",""];
         this.message = "";
@@ -17,16 +18,21 @@ class Chat {
         this.message = this.message.substring(0, this.message.length-1);
     }
 
+    outputMessage(msg) {
+        for(var i = 0; i < this.messages.length; i++) {
+            if (i === this.messages.length-1) {
+                this.messages[i] = msg;
+            } else {
+                this.messages[i] = this.messages[i+1];
+            }
+        }
+    }
+
     enterPressed() {
         if (this.message != "") {
-            for(var i = 0; i < this.messages.length; i++) {
-                if (i === this.messages.length-1) {
-                    this.messages[i] = this.game.player.name+": "+ this.message;
-                    this.message = "";
-                } else {
-                    this.messages[i] = this.messages[i+1];
-                }
-            }
+            this.outputMessage(this.game.player.name+": "+ this.message);
+            this.socket.emit('Send message',this.game.player.name+": "+ this.message);
+            this.message = "";
         }   else {
             this.typing = !this.typing;
         }

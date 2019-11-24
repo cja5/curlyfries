@@ -1,7 +1,7 @@
 //Same as blue unit, yet red
 class RedUnit extends Unit {
-    constructor(game, name) {
-        super(game, 100, 950, name);
+    constructor(game, name, socket) {
+        super(game, 100, 950, name, socket);
         this.image = document.getElementById("red_idle_right");
         this.idleRight = document.getElementById("red_idle_right");
         this.idleLeft = document.getElementById("red_idle_left");

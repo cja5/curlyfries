@@ -14,7 +14,6 @@ class Player {
     }
     //Updates x and y positions stored in the spectator class, used for camera
     updatePos() {
-        this.unit.changePos();
         //This keeps unit in the middle even if screen size changes
         this.unit.actual.x = document.documentElement.clientWidth/2 - this.unit.width/2;
         this.unit.actual.y = document.documentElement.clientHeight/2 - this.unit.height/2;

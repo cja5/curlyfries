@@ -1,37 +1,28 @@
 class Game {
-    constructor(num) {
+    constructor(num, socket) {
         //This object is passed to every other so they can freely access game data
         this.gameObjects = [];     //Array for game objects e.g. walls and power ups
         this.otherPlayers = [];   //Array for all other players
         this.blueTeam = [];      //Array for blue team
         this.redTeam = [];      //Array for red team
         this.spectate = false; //Passed to interface
-        this.dummy = new RedUnit(this, "Dummy");
-        this.otherPlayers.push(this.dummy);
-        this.redTeam.push(this.dummy);
+        this.socket = socket; //Multiplayer socket!
         if(num===1) { //1 - red team
-            this.unit = new RedUnit(this, "Player");
+            this.unit = new RedUnit(this, "Red boi", this.socket);
             this.redTeam.push(this.unit);  
             this.player = new ActivePlayer(this.unit, this);
         } else if(num===2) { //2 - blue team
-            this.unit = new BlueUnit(this, "Player");
+            this.unit = new BlueUnit(this, "Blue boi", this.socket);
             this.blueTeam.push(this.unit); 
             this.player = new ActivePlayer(this.unit, this);
         } else if(num===3) { //3 - spectator
-            this.player = new Spectator(this.dummy, this);
+            this.unit = new RedUnit(this, 'Dummy', this.socket);
+            this.player = new Spectator(this.unit, this);
             this.spectate = true; //enables spectator interface
-        }
-        this.un = new BlueUnit(this, "Uno");
-        this.otherPlayers.push(this.un);
-        this.blueTeam.push(this.un); 
-        for(var i = 0; i < 10 ; i++) {
-            var uno = new BlueUnit(this, "Default");
-            this.otherPlayers.push(uno);
-            this.blueTeam.push(uno); 
         }
         this.addObjects();
         this.camera = new Camera(this.player);
-        this.interface = new Interface(this, this.spectate);
+        this.interface = new Interface(this, this.spectate, this.socket);
         this.border = new Border(this);
 
         this.redScore = 0;
@@ -49,7 +40,9 @@ class Game {
     update(ctx) {
         this.otherPlayers.forEach((player) => player.update(ctx));
         this.gameObjects.forEach((gameObject) => gameObject.update(ctx));
-        this.player.update(ctx);
+        if (!(this.player instanceof Spectator)) {
+            this.player.update(ctx);
+        }
         this.border.update(ctx);
         this.interface.update(ctx);
     }
@@ -71,7 +64,6 @@ class Game {
         this.gameObjects.push(new Wall(this, 2700, 700, 50, 600));
         this.gameObjects.push(new Wall(this, 1700, 400, 600, 50));
         this.gameObjects.push(new Wall(this, 1700, 1500, 600, 50));
-        this.gameObjects.push(new Shield(this, 0, 775));
         this.gameObjects.push(new HealthPot(this, 0, 1200));
     }
 
