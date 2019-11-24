@@ -15,8 +15,6 @@ class Unit {
         this.alive = true;
         this.mouseMovement = false;
         this.count = 0;     //Used for running animation
-        this.count2 = 0;   //Used for power up timer
-        this.count3 = 0;  //Used for respawn time
         this.idleRight = document.getElementById("blue_idle_right");
         this.idleLeft = document.getElementById("blue_idle_left");
         this.goRight = document.getElementById("blue_right");
@@ -55,6 +53,7 @@ class Unit {
         };
 
         this.poweredUp = false;
+        this.playerPoweredUp = false;
 
     }
     //Check for standing still, changes running animation back to being idle
@@ -110,27 +109,23 @@ class Unit {
         this.healthBar.update(ctx);
         if(this.poweredUp) { //Shield power up timer
             this.shield.update(ctx);
-            this.count2++;
-            if (this.count2 > 300) {
-                this.poweredUp = false;
-            }
         }
-        } else { //Respawn timer basically
-            if(this.count3>100) {
-                this.socket.emit('Health', this.number, this.maxHealth);
-                this.health = this.maxHealth;
-                this.alive = true;
-                this.count3 = -1;
-                this.position = {
-                    x: this.respawn.x,
-                    y: this.respawn.y
-                }
-            }
-            this.count3++
-          }
+        }
           if(this.mouseMovement) {
               this.mouseCheck();
           }
+          if (this.playerPoweredUp) {
+              this.socket.emit('Shield timer', this.number, this.game.player.shieldTimer);
+          }
+    }
+
+    respawned() {
+        this.health = this.maxHealth;
+        this.alive = true;
+        this.position = {
+            x: this.respawn.x,
+            y: this.respawn.y
+        };
     }
 
     detectCollisions(gameObject) {
@@ -139,38 +134,44 @@ class Unit {
         if (gameObject instanceof Wall) {
             //top
             if (this.position.y > gameObject.position.y-this.height
-                && this.position.y+this.height < gameObject.position.y+this.speed+1) {
+                && this.position.y+this.height < gameObject.position.y+this.speed*2) {
                 this.position.y = gameObject.position.y-this.height;
             }
             //bottom
             if (this.position.y < gameObject.position.y+gameObject.height
-                && this.position.y > gameObject.position.y+gameObject.height-(this.speed+1)) {
+                && this.position.y > gameObject.position.y+gameObject.height-(this.speed*2)) {
                 this.position.y = gameObject.position.y+gameObject.height;
             } 
             //right side
             if (this.position.x > gameObject.position.x-this.width
-                && this.position.x < gameObject.position.x+this.speed+1
-                && this.position.y + this.height > gameObject.position.y+this.speed+1
-                && this.position.y < gameObject.position.y+gameObject.height-(this.speed+1) ) {
+                && this.position.x < gameObject.position.x+this.speed*2
+                && this.position.y + this.height > gameObject.position.y+this.speed*2
+                && this.position.y < gameObject.position.y+gameObject.height-(this.speed*2) ) {
                 this.position.x = gameObject.position.x-this.width;
             }
             //left side
             if (this.position.x < gameObject.position.x+gameObject.width
-                && this.position.x > gameObject.position.x-this.speed+1
-                && this.position.y + this.height > gameObject.position.y+this.speed+1
-                && this.position.y < gameObject.position.y+gameObject.height-(this.speed+1)) {
+                && this.position.x > gameObject.position.x-this.speed*2
+                && this.position.y + this.height > gameObject.position.y+this.speed*2
+                && this.position.y < gameObject.position.y+gameObject.height-(this.speed*2)) {
                 this.position.x = gameObject.position.x+gameObject.width;
             }
            }
            if (gameObject instanceof Shield) {
-                this.poweredUp = true;  //Makes the unit go super saiyan
-                this.count2 = 0;
+               if (this === this.game.player.unit) {
+                    this.poweredUp = true;  //Makes the unit go super saiyan
+                    this.playerPoweredUp = true;
+                    gameObject.active = false;
+                    this.socket.emit('Shield taken', this.number, gameObject.number);
+               }
            }
            if (gameObject instanceof HealthPot) {
+            if (this === this.game.player.unit) {
                 this.health = this.maxHealth;
-                if(this.game.player.unit === this) {
-                    this.socket.emit('Health', this.number, this.maxHealth);
-                }
+                this.socket.emit('Health', this.number, this.maxHealth);
+                gameObject.active = false;
+                this.socket.emit('Health taken', this.number, gameObject.number);
+            }
            }
         }
     }
@@ -329,9 +330,10 @@ class Unit {
         this.check();
     }
     //Changes unit position in the game
-    changePos() {
-        this.position.y += this.movement.y;
-        this.position.x += this.movement.x;
+    changePos(delta) {
+        var deltaTime = delta/20;
+        this.position.y += this.movement.y*deltaTime;
+        this.position.x += this.movement.x*deltaTime;
         if(this.game.player.unit === this && this.moving) {
             this.socket.emit('Change position', this.number, this.position.x, this.position.y);
         }
