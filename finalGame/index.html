@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title> Login </title>
+    <link href="/assets/css/loginpage.css" type="text/css" rel = "stylesheet">
+  </head>
+<body>
+  <div class="screen">
+    <h1>Welcome to curlyfries</h1>
+    <div class="container">
+      <div class = "form">
+        <div class="imgcontainer">
+          <img src="/assets/images/idle/blue_left_idle.png" alt="Avatar" class="avatar">
+        </div>
+
+        <form class = "login">
+          <div class="block">
+            <label for="uname"><b>Username</b></label>
+            <input type="text" placeholder="Enter Username" name="uname" required>
+          </div>
+          <div class = "block">
+            <label for="psw"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" name="psw" required>
+          </div>
+            <button type="submit" name = "loginbtn" >Login</button>
+            <p class = "message">Not registered? <a href = "register.html">Register</a></p>
+
+        </form>
+
+        <a href="game.html" class="continue">Continue as guest</a>
+
+    </div>
+    <div class="form" id="howtoplay">
+        <h1>How to play!</h1>
+        <p>The login page is under<br>construction so for now play as guest!</p>
+        <p>Choose your team, red or blue or watch as a<br>spectator!</p>
+        <p>Control your boi with WASD, arrow keys or the<br>mouse - click to move and press space to attack!</p>
+        <p>The goal is to kill one member of the opposite team by<br>attacking them 10 times so their health bar goes<br>fully red</p>
+    </div>
+  </div>
+</div>
+
+<script src ="/src/loginpage.js" type ="text/javascript" language = "javascript">
+</script>
+
+</body>

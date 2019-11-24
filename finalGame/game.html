@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>2D MMOG</title>
+  </head>
+<body>
+    <style>
+      canvas {
+        width:100%;
+        height:100%;
+        position:fixed;
+      }
+      img {
+        display: none;
+      }
+      </style>
+
+<img id="red_idle_left" src="assets/images/idle/red_left_idle.png">
+<img id="red_idle_right" src="assets/images/idle/red_right_idle.png">
+<img id="red_left" src="assets/images/moving/red_left_moving.png">
+<img id="red_right" src="assets/images/moving/red_right_moving.png">
+<img id="red_strike_left" src="assets/images/strike/red_left_strike.png">
+<img id="red_strike_right" src="assets/images/strike/red_right_strike.png">
+<img id="blue_idle_left" src="assets/images/idle/blue_left_idle.png">
+<img id="blue_idle_right" src="assets/images/idle/blue_right_idle.png">
+<img id="blue_left" src="assets/images/moving/blue_left_moving.png">
+<img id="blue_right" src="assets/images/moving/blue_right_moving.png">
+<img id="blue_strike_left" src="assets/images/strike/blue_left_strike.png">
+<img id="blue_strike_right" src="assets/images/strike/blue_right_strike.png">
+<audio id="swing" src="assets/sound/swing.mp3"></audio>
+
+<canvas id = "canvas"></canvas>
+<script src = "src/messageReader.js"></script>
+<script src = "src/chat.js"></script>
+<script src = "src/interface.js"></script>
+<script src = "src/border.js"></script>
+<script src = "src/collision.js"></script>
+<script src = "src/attack.js"></script>
+<script src = "src/camera.js"></script>
+<script src = "src/gameObject.js"></script>
+<script src = "src/wall.js"></script>
+<script src = "src/powerup.js"></script>
+<script src = "src/player.js"></script>
+<script src = "src/activePlayer.js"></script>
+<script src = "src/spectator.js"></script>
+<script src = "src/hpAndName.js"></script>
+<script src = "src/unit.js"></script>
+<script src = "src/blueUnit.js"></script>
+<script src = "src/redUnit.js"></script>
+<script src = "src/input.js"></script>
+<script src = "src/game.js"></script>
+<script src = "src/menu.js"></script>
+<script src = "src/index.js"></script>
+<script src = "server.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+
+</body>
+</html>
