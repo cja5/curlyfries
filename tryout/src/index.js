@@ -301,6 +301,10 @@ window.onload = function() {
     x:0,
     y:0
   }
+  window.ontouchstart = touch;
+  window.ontouchmove = touch;
+  window.ontouchend = touch;
+  window.ontouchcancel = touch;
   window.onmousemove = mouseMovement;
   window.ontouchmove = mouseMovement;
   window.onmousedown = mouseClick;
@@ -328,9 +332,23 @@ window.onload = function() {
   function mouseMovement(event) {
     var e = event || window.event;	
     mouse = { 
-      x: e.clientX, 
-      y: e.clientY 
+      x: e.pageX, 
+      y: e.pageY 
     };
+  }
+  //Touch event for touch screens
+  function touch(e) {
+    if (menu.gameStarted) {
+      menu.game.touchDevice = true;
+    }
+        var touch = e.changedTouches[0] || e.touches[0];
+        startx = parseInt(touch.clientX); 
+        starty = parseInt(touch.clientY); 
+        mouse = {
+          x:startx,
+          y:starty
+    };
+    mouseClick();
   }
   //Activates upon mouse click
   function mouseClick() {

@@ -30,7 +30,7 @@ class Chat {
     }
     //What happens when Enter is pressed
     enterPressed() {
-        if (this.message != "") {  //If message is not empty, outputs it
+        if (this.message != "" && this.message != null) {  //If message is not empty, outputs it
             this.outputMessage(this.game.player.name+": "+ this.message); //Adds a player name to the message
             this.socket.emit('Send message',this.game.player.name+": "+ this.message); //Sends this message to server
             this.message = "";  //Message is back to being an empty string
@@ -40,6 +40,9 @@ class Chat {
     }
     //Draws chat
     update(ctx) {
+        if (this.message === null) {
+            this.message = "";
+        }
         ctx.fillStyle = "Red";
         ctx.font = "15px Arial";
         ctx.beginPath();

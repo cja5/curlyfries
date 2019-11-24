@@ -9,6 +9,7 @@ class Game {
         this.socket = socket;                  //Multiplayer socket!
         this.deltaTime = new Date().getTime();//For constant operation time
         this.menu = menu;                    //For easy menu access
+        this.touchDevice = false;           //True if client is using touch screen
         if(num===1) { //1 - red team
             this.unit = new RedUnit(this, "Red boi", this.socket);
             this.redTeam.push(this.unit);  
@@ -50,6 +51,13 @@ class Game {
         }
         this.border.update(ctx);
         this.interface.update(ctx);
+
+        //Draws "ATTACK!" on touch screens
+        if (this.touchDevice && !(this.player instanceof Spectator)) {
+            ctx.fillStyle = "Red";
+            ctx.font = "80px Arial";
+            ctx.fillText("ATTACK!", document.documentElement.clientWidth-350, document.documentElement.clientHeight-75);
+        }
     }
     //creates all the objects on the map, ugly, yet it doesn't hold a pattern
     addObjects() {
@@ -81,7 +89,27 @@ class Game {
         this.gameObjects.push(new HealthPot(this, 1050, 1950, 7));
     }
     //Mouse click
-    click(x, y) {
-        this.player.click(x, y);
+    click(x, y) { //If clicked on the chat prompt
+        if (x >= 10 
+            && x <= 10 + 650
+            && y >= document.documentElement.clientHeight+this.interface.chat.messages.length*30-320 
+            && y <= document.documentElement.clientHeight+this.interface.chat.messages.length*30-320 + 35) {
+                if (this.touchDevice && this.interface.chat.typing && this.interface.chat.message === "") {
+                    this.interface.chat.message = prompt("Enter your message"); //Chat usage for touch devices
+                    this.interface.chat.enterPressed();
+                } else {
+                    this.interface.chat.typing = !this.interface.chat.typing
+                }
+            } else {
+        if (this.touchDevice &&
+            x > document.documentElement.clientWidth - 400 &&
+            y > document.documentElement.clientHeight - 125 &&
+            !(this.player instanceof Spectator)) {  //Special attack for touch screen
+                this.player.unit.attack();
+                this.player.unit.checkAttack();
+        } else {
+            this.player.click(x, y);
+        }
+    }
     }
 }
