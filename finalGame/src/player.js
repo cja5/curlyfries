@@ -37,7 +37,7 @@ class Player {
         };
         this.game.camera.update();
     }
-
+    //Draws a player unit
     update(ctx) {
         this.unit.update(ctx);
     }

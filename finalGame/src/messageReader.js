@@ -1,3 +1,4 @@
+//Message reader designed specifically for chat
 class MessageReader {
     constructor(chat) {
         this.chat = chat;
@@ -35,7 +36,7 @@ class MessageReader {
                         break;
                     case 50:
                         if (event.shiftKey) {
-                            this.chat.addCharacter("@");
+                            this.chat.addCharacter("@")
                         } else {
                             this.chat.addCharacter("2");
                         }
@@ -45,63 +46,63 @@ class MessageReader {
                         break;
                     case 52:
                         if (event.shiftKey) {
-                            this.chat.addCharacter("$");
+                            this.chat.addCharacter("$")
                         } else {
                             this.chat.addCharacter("4");
                         }
                         break;
                     case 53:
                         if (event.shiftKey) {
-                            this.chat.addCharacter("%");
+                            this.chat.addCharacter("%")
                         } else {
                             this.chat.addCharacter("5");
                         }
                         break;
                     case 54:
                         if (event.shiftKey) {
-                            this.chat.addCharacter("^");
+                            this.chat.addCharacter("^")
                         } else {
                             this.chat.addCharacter("6");
                         }
                         break;
                     case 55:
                         if (event.shiftKey) {
-                            this.chat.addCharacter("&");
+                            this.chat.addCharacter("&")
                         } else {
                             this.chat.addCharacter("7");
                         }
                         break;
                     case 56:
                         if (event.shiftKey) {
-                            this.chat.addCharacter("*");
+                            this.chat.addCharacter("*")
                         } else {
                             this.chat.addCharacter("8");
                         }
                         break;
                     case 57:
                         if (event.shiftKey) {
-                            this.chat.addCharacter("(");
+                            this.chat.addCharacter("(")
                         } else {
                             this.chat.addCharacter("9");
                         }
                         break;
                     case 48:
                         if (event.shiftKey) {
-                            this.chat.addCharacter(")");
+                            this.chat.addCharacter(")")
                         } else {
                             this.chat.addCharacter("0");
                         }
                         break;
                     case 189:
                         if (event.shiftKey) {
-                            this.chat.addCharacter("_");
+                            this.chat.addCharacter("_")
                         } else {
                             this.chat.addCharacter("-");
                         }
                         break;
                     case 187:
                         if (event.shiftKey) {
-                            this.chat.addCharacter("+");
+                            this.chat.addCharacter("+")
                         } else {
                             this.chat.addCharacter("=");
                         }
@@ -124,18 +125,18 @@ class MessageReader {
                     //Letters
                     default:
                         var char = String.fromCharCode(event.keyCode);
-                        if (char.match(/[a-z]/i)) {
+                        if (char.match(/[a-z]/i)) { //Checks if this is a letter
                             if (char === char.toUpperCase()) {
-                                char = char.toLowerCase();
+                                char = char.toLowerCase(); //Assigns upper case letters to lower case
                             }
-                            if (event.getModifierState("CapsLock")) {
-                                if(!event.shiftKey) {
+                            if (event.getModifierState("CapsLock")) { //Checks for CAPS
+                                if(!event.shiftKey) {                //Checks for Shift
                                     char = char.toUpperCase();
                                 }
                             } else if(event.shiftKey) {
                                 char = char.toUpperCase();
                             }
-                            this.chat.addCharacter(char);
+                            this.chat.addCharacter(char); //Adds a character to the message
                         }
                     } 
             }

@@ -8,14 +8,14 @@ class Border {
         this.position = {
             x:0,
             y:100
-        };
+        }
         //position on the screen
         this.actual = {
             x:0,
-            y:0
-        };
+            x:0
+        }
     }
-    //draw method
+    //draw method, draws a rectangle around playable map
     update(ctx) {
         ctx.beginPath();
         ctx.strokeStyle = "black";

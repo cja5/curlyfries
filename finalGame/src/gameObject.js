@@ -1,3 +1,4 @@
+//Class used for all sorts of game objects
 class GameObject {
     constructor(game, x, y) {
         this.game = game;
@@ -13,7 +14,7 @@ class GameObject {
             y:0
         };
     }
-
+    
     update(ctx) {
 
     }

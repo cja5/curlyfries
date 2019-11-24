@@ -4,7 +4,7 @@ class NameTag {
         this.unit = unit;
         this.name = unit.name;
     }
-
+    //Draws a name tag
     update(ctx) {
         ctx.fillStyle = "black";
         ctx.font = "15px Arial";
@@ -19,7 +19,7 @@ class HealthBar {
         this.width = this.unit.width/this.hp;
         this.height = 10;
     }
-
+    //Draws a health bar
     update(ctx) {
         var index = 0;
         while (index < this.hp) {
@@ -28,7 +28,7 @@ class HealthBar {
             } else {
                 ctx.fillStyle = "green";
             }
-            ctx.fillRect(this.unit.actual.x+index*this.width, this.unit.actual.y-12, this.width, this.height);
+            ctx.fillRect(this.unit.actual.x+index*this.width, this.unit.actual.y-12, this.width+1, this.height);
             index++;
         }
     }
@@ -38,7 +38,7 @@ class Power{
     constructor(unit) {
         this.unit = unit;
     }
-
+    //Draws a power up if active
     update(ctx) {
         ctx.fillStyle = "Blue";
         ctx.fillRect(this.unit.actual.x, this.unit.actual.y, 10, this.unit.height);

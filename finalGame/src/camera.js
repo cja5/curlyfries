@@ -6,7 +6,7 @@ class Camera {
         this.position = {
             x:0,
             y:0
-        };
+        }
 
     }
     //function that updates these x and y values regarding the position of a player

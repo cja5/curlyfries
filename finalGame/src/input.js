@@ -43,10 +43,14 @@ class InputListener {
                     case 68: 
                         unit.moveRight();
                         break;
+                    //Esc
+                    case 27:
+                        unit.game.menu.state = 3;
+                        break;
 
                 }
             }
-        });
+        })
             document.addEventListener("keyup", event => {
 
                 if(this.unit.game.interface.chat.typing === false) {
@@ -91,10 +95,10 @@ class InputListener {
                     }
     
                 }
-            });
+            })
     }
 }
-
+//Listener class created for spectators
 class SpectatorListener {
     constructor(player) {
         this.player = player;
@@ -119,9 +123,13 @@ class SpectatorListener {
                     case 68: 
                         this.player.moveRight();
                         break;
+                    //Esc
+                    case 27:
+                        this.player.game.menu.state = 3;
+                        break;
 
                 }
             }
-        });
+        })
     }
 }
