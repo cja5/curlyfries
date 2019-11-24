@@ -3,17 +3,17 @@ class Unit {
 
     constructor(game, x, y, name, socket) {
         this.socket = socket;
-        this.number = 0;  //unit's own player number
-        this.game = game;
-        this.name = name;
+        this.number = 0;            //unit's own player number
+        this.game = game;          //Game for easy access
+        this.name = name;         //Player's name
         this.image = document.getElementById("blue_idle_right");
-        this.width = 80;
+        this.width = 80;  
         this.height = 100;
-        this.speed = 5;
+        this.speed = 5;     //Player's speed
         this.side = true;  //True = right, False = left
-        this.moving = false;
+        this.moving = false; 
         this.alive = true;
-        this.mouseMovement = false;
+        this.mouseMovement = false; //Check if unit is still moving after a mouse click
         this.count = 0;     //Used for running animation
         this.idleRight = document.getElementById("blue_idle_right");
         this.idleLeft = document.getElementById("blue_idle_left");
@@ -52,19 +52,19 @@ class Unit {
             y:0
         };
 
-        this.poweredUp = false;
-        this.playerPoweredUp = false;
+        this.poweredUp = false;        //Check if unit is powered up
+        this.playerPoweredUp = false; //Check if powered up unit belongs to client's player
 
     }
     //Check for standing still, changes running animation back to being idle
     check() {  
         if (this.movement.x === 0 && this.movement.y === 0) {
-            if(this.game.player.unit === this) {
-                this.socket.emit('Desync check', this.number, 0, 0, this.side);
+            if(this.game.player.unit === this) { //Check if unit belongs to client's player
+                this.socket.emit('Desync check', this.number, 0, 0, this.side);  //Desync check sent to server
             }
-            this.moving = false;
+            this.moving = false;         //Stops any movement
             this.mouseMovement = false;
-            if(this.side) {
+            if(this.side) {    //Changes png to Idle
                 this.image = this.idleRight;
             } else {
                 this.image = this.idleLeft;
@@ -111,14 +111,14 @@ class Unit {
             this.shield.update(ctx);
         }
         }
-          if(this.mouseMovement) {
+          if(this.mouseMovement) {  //If unit is still moving after mouse click, make a check
               this.mouseCheck();
           }
-          if (this.playerPoweredUp) {
+          if (this.playerPoweredUp) {  //If current player is being powered up, check the shield's timer
               this.socket.emit('Shield timer', this.number, this.game.player.shieldTimer);
           }
     }
-
+    //Respawn method
     respawned() {
         this.health = this.maxHealth;
         this.alive = true;
@@ -158,28 +158,32 @@ class Unit {
             }
            }
            if (gameObject instanceof Shield) {
-               if (this === this.game.player.unit) {
+               if (this === this.game.player.unit) { //Checks if player is controlling this unit
+                if(gameObject.active) {
                     this.poweredUp = true;  //Makes the unit go super saiyan
                     this.playerPoweredUp = true;
-                    gameObject.active = false;
+                    gameObject.active = false;  //Makes powerup inactive and sends data to the server
                     this.socket.emit('Shield taken', this.number, gameObject.number);
+                }
                }
            }
            if (gameObject instanceof HealthPot) {
-            if (this === this.game.player.unit) {
-                this.health = this.maxHealth;
-                this.socket.emit('Health', this.number, this.maxHealth);
-                gameObject.active = false;
-                this.socket.emit('Health taken', this.number, gameObject.number);
+            if (this === this.game.player.unit) {//Checks if player is controlling this unit
+                if(gameObject.active) {
+                    this.health = this.maxHealth; //Restores hp and sends data to the server
+                    this.socket.emit('Health', this.number, this.maxHealth);
+                    gameObject.active = false; //Makes powerup inactive and sends data to the server
+                    this.socket.emit('Health taken', this.number, gameObject.number);
+                }
             }
            }
         }
     }
     //After mouse click
-    moveToClicked(x, y) {
+    moveToClicked(x, y) { //Method used only by player controlled unit
         this.movingTo.x = this.position.x+(x-this.actual.x);
         this.movingTo.y = this.position.y+(y-this.actual.y);
-        this.socket.emit('Click move', this.number, this.movingTo.x, this.movingTo.y);
+        this.socket.emit('Click move', this.number, this.movingTo.x, this.movingTo.y); //Sends information to the server
         this.moveToClick(this.movingTo.x, this.movingTo.y);
     }
     moveToClick(x, y) {
@@ -209,22 +213,22 @@ class Unit {
         if(this.position.x+this.width/2 > this.movingTo.x-5
             &&this.position.x+this.width/2 < this.movingTo.x+5) {
                 this.movement.x = 0;
-                this.check();
+                this.check(); //Checks for desyncs
                 this.socket.emit('Desync check', this.number, this.movement.x, this.movement.y, this.side);
         } if (this.position.y+this.height/2 > this.movingTo.y-5
             &&this.position.y+this.height/2 < this.movingTo.y+5) {
             this.movement.y = 0;
-            this.check();
+            this.check();  //Checks for desyncs
             this.socket.emit('Desync check', this.number, this.movement.x, this.movement.y, this.side);
         }
     }
-
+    //Used by every unit in the game
     moveUpNext() {
         this.movement.y = -this.speed;
         this.move();
     }
-
-    moveUp() {
+    //Used only by player's unit
+    moveUp() { //Sends info to the server
         this.socket.emit('Move up', this.number);
         this.moveUpNext();
     }
@@ -234,7 +238,7 @@ class Unit {
         this.movement.y = 0;
         this.check();
     }
-
+    //Used only by player's unit
     stopUp() {
         this.socket.emit('Stop up', this.number);
         this.stopUpNext();
@@ -243,8 +247,8 @@ class Unit {
     moveDownNext() {
         this.movement.y = this.speed;
         this.move();
-    }
-
+    }       
+    //Used only by player's unit
     moveDown() {
         this.socket.emit('Move down', this.number);
         this.moveDownNext();
@@ -255,7 +259,7 @@ class Unit {
         this.movement.y = 0;
         this.check();
     }
-
+    //Used only by player's unit
     stopDown() {
         this.socket.emit('Stop down', this.number);
         this.stopDownNext();
@@ -266,7 +270,7 @@ class Unit {
         this.side = false;
         this.move();
     }
-
+    //Used only by player's unit
     moveLeft() {
         this.socket.emit('Move left', this.number);
         this.moveLeftNext();
@@ -277,7 +281,7 @@ class Unit {
         this.movement.x = 0;
         this.check();
     }
-
+    //Used only by player's unit
     stopLeft() {
         this.socket.emit('Stop left', this.number);
         this.stopLeftNext();
@@ -288,7 +292,7 @@ class Unit {
         this.side = true;
         this.move();
     }
-
+    //Used only by player's unit
     moveRight() {
         this.socket.emit('Move right', this.number);
         this.moveRightNext();
@@ -299,7 +303,7 @@ class Unit {
         this.movement.x = 0;
         this.check();
     }
-
+    //Used only by player's unit
     stopRight() {
         this.socket.emit('Stop right', this.number);
         this.stopRightNext();
@@ -316,7 +320,7 @@ class Unit {
         let attack = new Attack(this.game, this, this.socket); //Creates a new attack object
         return attack.hit();                                  //And checks if it hit
     }
-
+    //Used only by player's unit
     attack() {
         this.socket.emit('Attack', this.number);
         var scoreChange = this.attackNext();
@@ -324,7 +328,7 @@ class Unit {
             this.socket.emit('Score change', this.number, scoreChange);
         }
     }
-
+    //Used only by player's unit
     checkAttack() {
         this.socket.emit('Check attack', this.number);
         this.check();
@@ -332,19 +336,22 @@ class Unit {
     //Changes unit position in the game
     changePos(delta) {
         var deltaTime = delta/20;
+        if (deltaTime > 5) {
+            deltaTime = 0;
+        }
         this.position.y += this.movement.y*deltaTime;
         this.position.x += this.movement.x*deltaTime;
-        if(this.game.player.unit === this && this.moving) {
+        if(this.game.player.unit === this && this.moving) { //Sends player's unit position to the server
             this.socket.emit('Change position', this.number, this.position.x, this.position.y);
         }
         //Restricts walkable zone
         this.checkBorder();
 
-        if(!this.alive) {
+        if(!this.alive) { //Removes unit outside of the map while being dead
             this.position.y = -100;
         }
     }
-
+    //Checks if unit is outside of the border
     checkBorder() {
         if (this.position.y < this.game.border.position.y) {
             this.position.y = this.game.border.position.y;

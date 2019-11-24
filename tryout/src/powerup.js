@@ -4,7 +4,7 @@ class PowerUp extends GameObject{
         this.width = 50;
         this.height = 50;
         this.fillStyle = "#00FF00";
-        this.active = true;
+        this.active = true;     //If false, powerup is not being drawn
         this.number = number;
     }
     //Draws an object, uses actual x and y values

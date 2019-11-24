@@ -43,6 +43,10 @@ class InputListener {
                     case 68: 
                         unit.moveRight();
                         break;
+                    //Esc
+                    case 27:
+                        unit.game.menu.state = 3;
+                        break;
 
                 }
             }
@@ -94,7 +98,7 @@ class InputListener {
             })
     }
 }
-
+//Listener class created for spectators
 class SpectatorListener {
     constructor(player) {
         this.player = player;
@@ -118,6 +122,10 @@ class SpectatorListener {
                     //D
                     case 68: 
                         this.player.moveRight();
+                        break;
+                    //Esc
+                    case 27:
+                        this.player.game.menu.state = 3;
                         break;
 
                 }

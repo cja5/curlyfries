@@ -15,7 +15,7 @@ class Border {
             x:0
         }
     }
-    //draw method
+    //draw method, draws a rectangle around playable map
     update(ctx) {
         ctx.beginPath();
         ctx.strokeStyle = "black";

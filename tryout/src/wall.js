@@ -5,7 +5,7 @@ class Wall extends GameObject {
         this.width = width;
         this.height = height;
     }
-
+    //Draws a wall
     update(ctx) {
         ctx.fillStyle = "black";
         ctx.fillRect(this.actual.x, this.actual.y, this.width, this.height);

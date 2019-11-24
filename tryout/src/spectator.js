@@ -3,14 +3,14 @@ class Spectator extends Player {
     constructor(unit, game) {
         super(unit, game);
         this.game = game;
-        this.playerNum = 0;
+        this.playerNum = 0; //Current spectated player
         
         new SpectatorListener(this);
     }
     //moves to the next player
     moveLeft() {
-        if (this.game.otherPlayers.length !== 0) {
-            this.playerNum += 1;
+        if (this.game.otherPlayers.length !== 0) { //If there are no active players
+            this.playerNum += 1;                  //Then restricts any actions
             if(this.playerNum >= this.game.otherPlayers.length) {
                 this.playerNum = 0;
             }
@@ -27,8 +27,8 @@ class Spectator extends Player {
             this.unit = this.game.otherPlayers[this.playerNum];
         }
     }
-
+    //Mouse click switches to the next player
     click(x, y) {
-        this.moveRight();
+        this.moveLeft();
     }
 }
