@@ -132,6 +132,7 @@ io.on('connection', function(socket) {
   });
   //Syncs dead units
   socket.on('Death', function(number) {
+    playerList[number].alive = false;
     socket.broadcast.emit('Death', number);
   });
   //Starts a countdown for respawn
@@ -141,6 +142,7 @@ io.on('connection', function(socket) {
   });
   //Respawns a unit for every client
   socket.on('Respawned', function(number) {
+    playerList[number].alive = true;
     socket.broadcast.emit('Respawned', number);
   });
   //Makes the shield inactive and sets a specific player to being powered up
@@ -223,7 +225,8 @@ powerups = Array(8).fill(true);
 //Add players function, goes through the player list
 function addPlayers(number, socket) {
   for (var i = 1; i < number; i++) {
-    socket.emit('Add player', i, playerList[i].team, playerList[i].name, playerList[i].x, playerList[i].y, playerList[i].health, playerList[i].poweredUp);
+    var player = playerList[i];
+    socket.emit('Add player', i, player.team, player.name, player.x, player.y, player.health, player.poweredUp, player.alive);
   }
 }
 //Removes a player from the game, shifts unique ids, outputs a message etc
@@ -253,5 +256,6 @@ class PlayerList {
     this.y = y;
     this.health = health;
     this.poweredUp = false;
+    this.alive = true;
   }
 }

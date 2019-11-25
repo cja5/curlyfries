@@ -42,7 +42,7 @@ window.onload = function() {
     }
   });
   //Upon joining, adds all current players to your game
-  socket.on('Add player', function(num, team, name, x, y, health, powerup) {
+  socket.on('Add player', function(num, team, name, x, y, health, powerup, alive) {
     if (team === 1) { //1 = red
       let elderly = new RedUnit(menu.game, name, socket);
       elderly.number = num;    //Player id
@@ -50,6 +50,7 @@ window.onload = function() {
       elderly.position.x = x;
       elderly.position.y = y;
       elderly.poweredUp = powerup;  //True if unit is currently powered up
+      elderly.alive = alive;
       menu.game.redTeam.push(elderly);
       menu.game.otherPlayers.push(elderly);
     } else {   //2 = blue
@@ -59,6 +60,7 @@ window.onload = function() {
       elderly.position.x = x;
       elderly.position.y = y;
       elderly.poweredUp = powerup;  //True if unit is currently powered up
+      elderly.alive = alive;
       menu.game.blueTeam.push(elderly);
       menu.game.otherPlayers.push(elderly);
     }
