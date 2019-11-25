@@ -9,7 +9,7 @@ How to download and launch the game:
           2) npm install socket.io
           3) npm install express
           4) npm install jquery
-5. Type "node (your directories)\finalGame\server.js"
+5. Type "node server.js"
 6. Connect using localhost:50710 or 127.0.0.1:50710.
 7. Either find a good way of hosting this online (eg port forwarding) or invite friends to join localy.
 8. Enjoy! 
