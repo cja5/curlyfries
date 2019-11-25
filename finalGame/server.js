@@ -174,11 +174,11 @@ io.on('connection', function(socket) {
     socket.emit('Score change', redScore, blueScore);
     socket.broadcast.emit('Score change', redScore, blueScore);
     //Game ending conditions
-    if(redScore >= 1) {
+    if(redScore >= 50) {
       socket.emit('Red victory');
       socket.broadcast.emit('Red victory');
       restart();
-    } else if (blueScore >= 1) {
+    } else if (blueScore >= 50) {
       socket.emit('Blue victory');
       socket.broadcast.emit('Blue victory');
       restart();
