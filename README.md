@@ -1,22 +1,15 @@
 # curlyfries
-Our group for Web Programming should use this to update the programming as we progress with the coursework.
-Time to do stuff.
 
-
-
-Game Ideas:
-1. Team-based, colours represent the different teams 
-2. Melee combat w/ swords 
-3. When 'killed', player respawns after x amount of seconds elsewhere on the map 
-4. Multiple game modes ? (capture the flag, king of the hill, falling tiles etc...)
-5. Power-ups such as temporary shields (mitigates damage for x amount of seconds) and health packs 
-6. Health bar 
-7. Text chat 
-8. User-inputted name tag above character
-9. Prevent cheating by introducing bounds in player stats that are regularly monitored (stopping players from manually editing their health bar)
-10. Can try mouse movement too
-11. Multiple classes ?
-12. Maybe keep the games to a certain time limit e.g. 10 minutes per game
-
-
-Also please could everyone uploading/committing code use comments, it really helps everyone understand what you're doing so they can use that properly. It saves a lot of time in the long run. 
+How to download and launch the game:
+1. Download zip file from github and extract finalGame folder.
+2. Install node.js
+3. Open terminal and using "cd" go to \finalGame wherever it is.
+4. Typing in "npm install" should be enough, but just in case might as well type all of these:
+          1) npm install require
+          2) npm install socket.io
+          3) npm install express
+          4) npm install jquery
+5. Type "node (your directories)\finalGame\server.js"
+6. Connect using localhost:50710 or 127.0.0.1:50710.
+7. Either find a good way of hosting this online (eg port forwarding) or invite friends to join localy.
+8. Enjoy! 
